@@ -23,10 +23,8 @@ Long description of module's purpose
     # always loaded
    'data': [
         'security/ir.model.access.csv',
-        # Load ALL view files FIRST (order doesn't matter between them)
         'views/views.xml',           # types, amenities, spaces, bookings
         'views/library_views.xml',   # library items + borrow history
-        # Then load menus LAST (after all actions are defined)
         'views/menus.xml',
         'views/templates.xml',
     ],
