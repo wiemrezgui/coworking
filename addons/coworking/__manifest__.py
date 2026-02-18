@@ -21,12 +21,14 @@ Long description of module's purpose
     'depends': ['base'],
 
     # always loaded
-    'data': [
+   'data': [
         'security/ir.model.access.csv',
-        'views/views.xml',
-        'views/templates.xml',
+        # Load ALL view files FIRST (order doesn't matter between them)
+        'views/views.xml',           # types, amenities, spaces, bookings
+        'views/library_views.xml',   # library items + borrow history
+        # Then load menus LAST (after all actions are defined)
         'views/menus.xml',
-        'views/workspace_space_views.xml',
+        'views/templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

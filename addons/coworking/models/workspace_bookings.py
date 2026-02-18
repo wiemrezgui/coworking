@@ -38,3 +38,11 @@ class WorkspaceBooking(models.Model):
                 elif booking.booking_type == 'monthly':
                     months = duration / (24 * 30)  # approximate
                     booking.total_price = months * booking.space_id.monthly_rate
+    def action_confirm(self):
+        self.status = 'confirmed'
+
+    def action_cancel(self):
+        self.status = 'cancelled'
+
+    def action_complete(self):
+        self.status = 'completed'

@@ -1,16 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- MAIN TOP MENU (NO ACTION HERE) -->
+    <!-- MAIN TOP MENU -->
     <menuitem id="menu_coworking_main"
               name="Coworking"
               sequence="10"/>
 
-    <!-- SUBMENU WITH ACTION -->
+    <!-- WORKSPACE -->
+    <menuitem id="menu_coworking_workspace"
+              name="Workspace"
+              parent="menu_coworking_main"
+              sequence="1"/>
+
     <menuitem id="menu_workspace_space"
               name="Spaces"
-              parent="menu_coworking_main"
+              parent="menu_coworking_workspace"
               action="action_workspace_space"
               sequence="1"/>
+
+    <menuitem id="menu_workspace_booking"
+              name="Bookings"
+              parent="menu_coworking_workspace"
+              action="action_workspace_booking"
+              sequence="2"/>
+
+    <!-- CONFIGURATION -->
+    <menuitem id="menu_coworking_config"
+              name="Configuration"
+              parent="menu_coworking_main"
+              sequence="2"/>
+
+    <menuitem id="menu_workspace_type"
+              name="Space Types"
+              parent="menu_coworking_config"
+              action="action_workspace_type"
+              sequence="1"/>
+
+    <menuitem id="menu_workspace_amenity"
+              name="Amenities"
+              parent="menu_coworking_config"
+              action="action_workspace_amenity"
+              sequence="2"/>
+
+    <!-- LIBRARY -->
+    <menuitem id="menu_coworking_library"
+              name="Library"
+              parent="menu_coworking_main"
+              sequence="3"/>
+
+    <menuitem id="menu_library_item"
+              name="Equipment"
+              parent="menu_coworking_library"
+              action="action_library_item"
+              sequence="1"/>
+
+    <menuitem id="menu_library_borrow_history"
+              name="Borrow History"
+              parent="menu_coworking_library"
+              action="action_library_borrow_history"
+              sequence="2"/>
 
 </odoo>

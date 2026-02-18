@@ -27,3 +27,16 @@ class LibraryItem(models.Model):
     borrower_id = fields.Many2one('res.partner', string='Borrower')
     borrow_date = fields.Datetime(string='Borrow Date')
     notes = fields.Text(string='Notes')
+    def action_borrow(self):
+        self.status = 'borrowed'
+
+    def action_return(self):
+        self.status = 'available'
+        self.borrower_id = False
+        self.borrow_date = False
+
+    def action_maintenance(self):
+        self.status = 'maintenance'
+
+    def action_available(self):
+        self.status = 'available'

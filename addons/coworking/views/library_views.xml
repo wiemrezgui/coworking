@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =====================================================
+         LIBRARY ITEMS
+         - category: Selection (monitor/cable/keyboard/mouse/charger/webcam)
+         - condition: Selection (new/good/fair)
+         - status:    Selection (available/borrowed/maintenance)
+         - borrower_id: Many2one res.partner
+         - borrow_date: Datetime
+         - notes: Text
+    ====================================================== -->
+
+    <record id="view_library_item_tree" model="ir.ui.view">
+        <field name="name">library.item.tree</field>
+        <field name="model">library.item</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="status == 'available'"
+                  decoration-warning="status == 'borrowed'"
+                  decoration-danger="status == 'maintenance'">
+                <field name="name"/>
+                <field name="category"/>
+                <field name="condition"/>
+                <field name="status" invisible="1"/>
+                <field name="borrower_id"/>
+                <field name="borrow_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_library_item_form" model="ir.ui.view">
+        <field name="name">library.item.form</field>
+        <field name="model">library.item</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_borrow"      string="Borrow"         type="object"
+                            class="btn-primary"
+                            invisible="status != 'available'"/>
+                    <button name="action_return"      string="Return"         type="object"
+                            invisible="status != 'borrowed'"/>
+                    <button name="action_maintenance" string="Send to Maintenance" type="object"
+                            invisible="status == 'maintenance'"/>
+                    <button name="action_available"   string="Set Available"  type="object"
+                            invisible="status == 'available'"/>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="available,borrowed,maintenance"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Equipment Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Item Details">
+                            <!-- Selection fields — no widget needed, renders as dropdown -->
+                            <field name="category"/>
+                            <field name="condition"/>
+                            <field name="status"/>
+                        </group>
+                        <group string="Borrow Info">
+                            <field name="borrower_id"/>
+                            <field name="borrow_date"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_library_item_search" model="ir.ui.view">
+        <field name="name">library.item.search</field>
+        <field name="model">library.item</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="borrower_id"/>
+                <!-- Status filters -->
+                <filter string="Available"   name="available"   domain="[('status', '=', 'available')]"/>
+                <filter string="Borrowed"    name="borrowed"    domain="[('status', '=', 'borrowed')]"/>
+                <filter string="Maintenance" name="maintenance" domain="[('status', '=', 'maintenance')]"/>
+                <separator/>
+                <!-- Category filters matching Selection values -->
+                <filter string="Monitor"  name="cat_monitor"  domain="[('category', '=', 'monitor')]"/>
+                <filter string="Cable"    name="cat_cable"    domain="[('category', '=', 'cable')]"/>
+                <filter string="Keyboard" name="cat_keyboard" domain="[('category', '=', 'keyboard')]"/>
+                <filter string="Mouse"    name="cat_mouse"    domain="[('category', '=', 'mouse')]"/>
+                <filter string="Charger"  name="cat_charger"  domain="[('category', '=', 'charger')]"/>
+                <filter string="Webcam"   name="cat_webcam"   domain="[('category', '=', 'webcam')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category"  name="group_category"  context="{'group_by': 'category'}"/>
+                    <filter string="Status"    name="group_status"    context="{'group_by': 'status'}"/>
+                    <filter string="Condition" name="group_condition" context="{'group_by': 'condition'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_library_item" model="ir.actions.act_window">
+        <field name="name">Equipment</field>
+        <field name="res_model">library.item</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_available': 1}</field>
+    </record>
+
+
+    <!-- =====================================================
+         LIBRARY BORROW HISTORY
+         - item_id:     Many2one library.item   (required)
+         - borrower_id: Many2one res.partner    (required)
+         - borrow_date: Datetime                (required)
+         - return_date: Datetime                (optional)
+         _order = 'borrow_date desc'
+    ====================================================== -->
+
+    <record id="view_library_borrow_history_tree" model="ir.ui.view">
+        <field name="name">library.borrow.history.tree</field>
+        <field name="model">library.borrow.history</field>
+        <field name="arch" type="xml">
+            <tree decoration-warning="return_date == False">
+                <field name="item_id"/>
+                <field name="borrower_id"/>
+                <field name="borrow_date"/>
+                <field name="return_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_library_borrow_history_form" model="ir.ui.view">
+        <field name="name">library.borrow.history.form</field>
+        <field name="model">library.borrow.history</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="item_id"/>
+                            <field name="borrower_id"/>
+                        </group>
+                        <group>
+                            <field name="borrow_date"/>
+                            <field name="return_date"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_library_borrow_history_search" model="ir.ui.view">
+        <field name="name">library.borrow.history.search</field>
+        <field name="model">library.borrow.history</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="item_id"/>
+                <field name="borrower_id"/>
+                <filter string="Not Yet Returned" name="not_returned"
+                        domain="[('return_date', '=', False)]"/>
+                <filter string="Returned" name="returned"
+                        domain="[('return_date', '!=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Item"     name="group_item"     context="{'group_by': 'item_id'}"/>
+                    <filter string="Borrower" name="group_borrower" context="{'group_by': 'borrower_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_library_borrow_history" model="ir.actions.act_window">
+        <field name="name">Borrow History</field>
+        <field name="res_model">library.borrow.history</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_not_returned': 1}</field>
+    </record>
+
+</odoo>
