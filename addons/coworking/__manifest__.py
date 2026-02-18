@@ -23,6 +23,7 @@ Long description of module's purpose
     # always loaded
    'data': [
         'security/ir.model.access.csv',
+        'views/coworking_customer_views.xml', # customer views
         'views/views.xml',           # types, amenities, spaces, bookings
         'views/library_views.xml',   # library items + borrow history
         'views/menus.xml',

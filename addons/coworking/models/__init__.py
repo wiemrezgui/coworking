@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from . import coworking_customer
 from . import workspace_types
 from . import workspace_amenities
 from . import workspace_spaces

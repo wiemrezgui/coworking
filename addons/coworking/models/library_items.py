@@ -24,7 +24,7 @@ class LibraryItem(models.Model):
         ('borrowed', 'Borrowed'),
         ('maintenance', 'Maintenance')
     ], string='Status', default='available')
-    borrower_id = fields.Many2one('res.partner', string='Borrower')
+    borrower_id = fields.Many2one('coworking.customer', string='Borrower')
     borrow_date = fields.Datetime(string='Borrow Date')
     notes = fields.Text(string='Notes')
     def action_borrow(self):

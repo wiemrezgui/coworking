@@ -7,7 +7,7 @@ class WorkspaceBooking(models.Model):
     _order = 'start_date desc'
 
     space_id = fields.Many2one('workspace.space', string='Space', required=True)
-    customer_id = fields.Many2one('res.partner', string='Customer', required=True)
+    customer_id = fields.Many2one('coworking.customer', string='Customer', required=True)
     booking_type = fields.Selection([
         ('hourly', 'Hourly'),
         ('daily', 'Daily'),

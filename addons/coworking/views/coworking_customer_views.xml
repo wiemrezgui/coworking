@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree view -->
+    <record id="view_coworking_customer_tree" model="ir.ui.view">
+        <field name="name">coworking.customer.tree</field>
+        <field name="model">coworking.customer</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="company"/>
+                <field name="booking_count"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view-->
+    <record id="view_coworking_customer_form" model="ir.ui.view">
+        <field name="name">coworking.customer.form</field>
+        <field name="model">coworking.customer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="active" widget="boolean_toggle"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Customer Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Contact Info">
+                            <field name="email" widget="email"/>
+                            <field name="phone" widget="phone"/>
+                        </group>
+                        <group string="Company Info">
+                            <field name="company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Bookings">
+                            <field name="booking_ids" readonly="1">
+                                <tree>
+                                    <field name="space_id"/>
+                                    <field name="booking_type"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="total_price"/>
+                                    <field name="status"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Borrow History">
+                            <field name="borrow_ids" readonly="1">
+                                <tree>
+                                    <field name="item_id"/>
+                                    <field name="borrow_date"/>
+                                    <field name="return_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="view_coworking_customer_search" model="ir.ui.view">
+        <field name="name">coworking.customer.search</field>
+        <field name="model">coworking.customer</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="company"/>
+                <filter name="active" string="Active" domain="[('active','=',True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active','=',False)]"/>
+                <separator/>
+                <filter name="companies" string="Has Company" domain="[('company','!=',False)]"/>
+                <filter name="individuals" string="No Company" domain="[('company','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_coworking_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">coworking.customer</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+</odoo>

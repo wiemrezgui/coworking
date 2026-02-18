@@ -59,5 +59,10 @@
               parent="menu_coworking_library"
               action="action_library_borrow_history"
               sequence="2"/>
+    <menuitem id="menu_coworking_customer"
+          name="Customers"
+          parent="menu_coworking_main"
+          action="action_coworking_customer"
+          sequence="5"/>          
 
 </odoo>
