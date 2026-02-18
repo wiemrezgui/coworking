@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_library_borrow_history,library.borrow.history,model_library_borrow_history,base.group_user,1,1,1,1
+access_library_item,library.item,model_library_item,base.group_user,1,1,1,1
+access_workspace_amenity,workspace.amenity,model_workspace_amenity,base.group_user,1,1,1,1
+access_workspace_booking,workspace.booking,model_workspace_booking,base.group_user,1,1,1,1
+access_workspace_space_amenity,workspace.space.amenity,model_workspace_space_amenity,base.group_user,1,1,1,1
+access_workspace_space,workspace.space,model_workspace_space,base.group_user,1,1,1,1
+access_workspace_type,workspace.type,model_workspace_type,base.group_user,1,1,1,1

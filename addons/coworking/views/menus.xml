@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- MAIN TOP MENU (NO ACTION HERE) -->
+    <menuitem id="menu_coworking_main"
+              name="Coworking"
+              sequence="10"/>
+
+    <!-- SUBMENU WITH ACTION -->
+    <menuitem id="menu_workspace_space"
+              name="Spaces"
+              parent="menu_coworking_main"
+              action="action_workspace_space"
+              sequence="1"/>
+
+</odoo>

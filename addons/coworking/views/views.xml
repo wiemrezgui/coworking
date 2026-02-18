@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="coworking.list">
+      <field name="name">coworking list</field>
+      <field name="model">coworking.coworking</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="coworking.action_window">
+      <field name="name">coworking window</field>
+      <field name="res_model">coworking.coworking</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="coworking.action_server">
+      <field name="name">coworking server</field>
+      <field name="model_id" ref="model_coworking_coworking"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="coworking" id="coworking.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="coworking.menu_1" parent="coworking.menu_root"/>
+    <menuitem name="Menu 2" id="coworking.menu_2" parent="coworking.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="coworking.menu_1_list" parent="coworking.menu_1"
+              action="coworking.action_window"/>
+    <menuitem name="Server to list" id="coworking" parent="coworking.menu_2"
+              action="coworking.action_server"/>
+-->
+  </data>
+</odoo>
