@@ -50,31 +50,14 @@ class LibraryBorrowHistory(models.Model):
         
         # Créer l'emprunt
         res = super(LibraryBorrowHistory, self).create(vals)
-        
-        # Forcer le recalcul des quantités sur l'item
-        if res.item_id:
-            res.item_id._compute_quantities()
-            res.item_id._compute_status()
-        
+        res.item_id.invalidate_recordset(['borrow_history_ids'])
         return res
     
     def write(self, vals):
-        """Surcharge de l'écriture pour gérer les retours"""
-        old_return_dates = {record.id: record.return_date for record in self}
-        
         res = super(LibraryBorrowHistory, self).write(vals)
-        
-        # Si on a modifié les dates de retour
         if 'return_date' in vals:
-            for record in self:
-                # Si c'est un retour (return_date ajoutée ou modifiée)
-                if not old_return_dates[record.id] and record.return_date:
-                    # C'est un retour
-                    item = record.item_id
-                    # Forcer le recalcul des quantités
-                    item._compute_quantities()
-                    item._compute_status()
-        
+            items = self.mapped('item_id')
+            items.invalidate_recordset(['borrow_history_ids'])
         return res
     
     def unlink(self):

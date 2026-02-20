@@ -54,11 +54,6 @@
               action="action_library_item"
               sequence="1"/>
 
-    <menuitem id="menu_library_borrow_history"
-              name="Borrow History"
-              parent="menu_coworking_library"
-              action="action_library_borrow_history"
-              sequence="2"/>
     <menuitem id="menu_coworking_customer"
           name="Customers"
           parent="menu_coworking_main"
