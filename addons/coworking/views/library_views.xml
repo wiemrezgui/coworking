@@ -3,12 +3,6 @@
 
     <!-- =====================================================
          LIBRARY ITEMS
-         - category: Selection (monitor/cable/keyboard/mouse/charger/webcam)
-         - condition: Selection (new/good/fair)
-         - status:    Selection (available/borrowed/maintenance)
-         - borrower_id: Many2one res.partner
-         - borrow_date: Datetime
-         - notes: Text
     ====================================================== -->
 
     <record id="view_library_item_tree" model="ir.ui.view">
@@ -16,14 +10,16 @@
         <field name="model">library.item</field>
         <field name="arch" type="xml">
             <tree decoration-success="status == 'available'"
-                  decoration-warning="status == 'borrowed'"
-                  decoration-danger="status == 'maintenance'">
+                  decoration-warning="status == 'limited'"
+                  decoration-danger="status in ('borrowed', 'unavailable')"
+                  decoration-info="status == 'maintenance'">
                 <field name="name"/>
                 <field name="category"/>
                 <field name="condition"/>
-                <field name="status" />
-                <field name="borrower_id"/>
-                <field name="borrow_date"/>
+                <field name="total_quantity" string="Total"/>
+                <field name="available_quantity" string="Available"/>
+                <field name="status" widget="badge"/>
+                <field name="total_borrow_count" string="Total Borrows"/>
             </tree>
         </field>
     </record>
@@ -34,17 +30,14 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_borrow"      string="Borrow"         type="object"
-                            class="btn-primary"
-                            invisible="status != 'available'"/>
-                    <button name="action_return"      string="Return"         type="object"
-                            invisible="status != 'borrowed'"/>
-                    <button name="action_maintenance" string="Send to Maintenance" type="object"
-                            invisible="status == 'maintenance'"/>
-                    <button name="action_available"   string="Set Available"  type="object"
-                            invisible="status == 'available'"/>
+                    <button name="action_maintenance" string="Maintenance" type="object"
+                            class="btn-warning"
+                            invisible="condition == 'maintenance'"/>
+                    <button name="action_available" string="Set Available" type="object"
+                            class="btn-success"
+                            invisible="condition != 'maintenance'"/>
                     <field name="status" widget="statusbar"
-                           statusbar_visible="available,borrowed,maintenance"/>
+                           statusbar_visible="available,limited,borrowed,maintenance,unavailable"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -54,19 +47,41 @@
                     </div>
                     <group>
                         <group string="Item Details">
-                            <!-- Selection fields — no widget needed, renders as dropdown -->
                             <field name="category"/>
                             <field name="condition"/>
-                            <field name="status"/>
+                            <field name="total_quantity"/>
                         </group>
-                        <group string="Borrow Info">
-                            <field name="borrower_id"/>
-                            <field name="borrow_date"/>
+                        <group string="Availability">
+                            <field name="available_quantity" readonly="1"/>
+                            <field name="total_borrow_count" string="Total Borrows" readonly="1"/>
                         </group>
                     </group>
-                    <group string="Notes">
-                        <field name="notes" nolabel="1"/>
+                    
+                    <!-- Informations sur les emprunts en cours -->
+                    <group string="Current Borrowers" 
+                           invisible="not current_borrower_ids">
+                        <field name="current_borrower_ids" readonly="1" nolabel="1">
+                            <tree>
+                                <field name="borrower_id"/>
+                                <field name="borrow_date"/>
+                            </tree>
+                        </field>
                     </group>
+                    
+                    <notebook>
+                        <page string="Borrow History">
+                            <field name="borrow_history_ids" readonly="1">
+                                <tree>
+                                    <field name="borrower_id"/>
+                                    <field name="borrow_date"/>
+                                    <field name="return_date"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -78,13 +93,12 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="borrower_id"/>
-                <!-- Status filters -->
                 <filter string="Available"   name="available"   domain="[('status', '=', 'available')]"/>
+                <filter string="Limited"     name="limited"     domain="[('status', '=', 'limited')]"/>
                 <filter string="Borrowed"    name="borrowed"    domain="[('status', '=', 'borrowed')]"/>
                 <filter string="Maintenance" name="maintenance" domain="[('status', '=', 'maintenance')]"/>
+                <filter string="Unavailable" name="unavailable" domain="[('status', '=', 'unavailable')]"/>
                 <separator/>
-                <!-- Category filters matching Selection values -->
                 <filter string="Monitor"  name="cat_monitor"  domain="[('category', '=', 'monitor')]"/>
                 <filter string="Cable"    name="cat_cable"    domain="[('category', '=', 'cable')]"/>
                 <filter string="Keyboard" name="cat_keyboard" domain="[('category', '=', 'keyboard')]"/>
@@ -109,19 +123,14 @@
 
 
     <!-- =====================================================
-         LIBRARY BORROW HISTORY
-         - item_id:     Many2one library.item   (required)
-         - borrower_id: Many2one res.partner    (required)
-         - borrow_date: Datetime                (required)
-         - return_date: Datetime                (optional)
-         _order = 'borrow_date desc'
+         LIBRARY BORROW HISTORY 
     ====================================================== -->
 
     <record id="view_library_borrow_history_tree" model="ir.ui.view">
         <field name="name">library.borrow.history.tree</field>
         <field name="model">library.borrow.history</field>
         <field name="arch" type="xml">
-            <tree decoration-warning="return_date == False">
+            <tree decoration-warning="not return_date">
                 <field name="item_id"/>
                 <field name="borrower_id"/>
                 <field name="borrow_date"/>
@@ -137,11 +146,11 @@
             <form>
                 <sheet>
                     <group>
-                        <group>
+                        <group string="Borrow Information">
                             <field name="item_id"/>
                             <field name="borrower_id"/>
                         </group>
-                        <group>
+                        <group string="Dates">
                             <field name="borrow_date"/>
                             <field name="return_date"/>
                         </group>
@@ -174,7 +183,7 @@
         <field name="name">Borrow History</field>
         <field name="res_model">library.borrow.history</field>
         <field name="view_mode">tree,form</field>
-        <field name="context">{'search_default_not_returned': 1}</field>
+        <field name="context">{}</field>
     </record>
 
 </odoo>
