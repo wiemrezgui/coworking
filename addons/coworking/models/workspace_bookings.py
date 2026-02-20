@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class WorkspaceBooking(models.Model):
     _name = 'workspace.booking'
@@ -13,8 +13,14 @@ class WorkspaceBooking(models.Model):
         ('daily', 'Daily'),
         ('monthly', 'Monthly')
     ], string='Booking Type', required=True)
-    start_date = fields.Datetime(string='Start Date', required=True)
-    end_date = fields.Datetime(string='End Date', required=True)
+    
+    # Champs pour la durée
+    duration_value = fields.Float(string='Duration', default=1.0, required=True)
+    
+    # Dates calculées
+    start_date = fields.Datetime(string='Start Date', required=True, default=fields.Datetime.now)
+    end_date = fields.Datetime(string='End Date', compute='_compute_end_date', store=True, readonly=False)
+    
     total_price = fields.Float(string='Total Price', compute='_compute_total_price', store=True)
     status = fields.Selection([
         ('pending', 'Pending'),
@@ -25,19 +31,29 @@ class WorkspaceBooking(models.Model):
     notes = fields.Text(string='Notes')
     created_date = fields.Datetime(string='Created Date', default=fields.Datetime.now)
 
-    @api.depends('space_id', 'booking_type', 'start_date', 'end_date')
+    @api.depends('booking_type', 'duration_value', 'start_date')
+    def _compute_end_date(self):
+        for booking in self:
+            if booking.start_date and booking.duration_value:
+                if booking.booking_type == 'hourly':
+                    booking.end_date = booking.start_date + timedelta(hours=booking.duration_value)
+                elif booking.booking_type == 'daily':
+                    booking.end_date = booking.start_date + timedelta(days=booking.duration_value)
+                elif booking.booking_type == 'monthly':
+                    # Approximation: 30 jours par mois
+                    booking.end_date = booking.start_date + timedelta(days=30 * booking.duration_value)
+
+    @api.depends('space_id', 'booking_type', 'duration_value')
     def _compute_total_price(self):
         for booking in self:
-            if booking.space_id and booking.start_date and booking.end_date:
-                duration = (booking.end_date - booking.start_date).total_seconds() / 3600  # hours
+            if booking.space_id and booking.duration_value:
                 if booking.booking_type == 'hourly':
-                    booking.total_price = duration * booking.space_id.hourly_rate
+                    booking.total_price = booking.duration_value * booking.space_id.hourly_rate
                 elif booking.booking_type == 'daily':
-                    days = duration / 24
-                    booking.total_price = days * booking.space_id.daily_rate
+                    booking.total_price = booking.duration_value * booking.space_id.daily_rate
                 elif booking.booking_type == 'monthly':
-                    months = duration / (24 * 30)  # approximate
-                    booking.total_price = months * booking.space_id.monthly_rate
+                    booking.total_price = booking.duration_value * booking.space_id.monthly_rate
+
     def action_confirm(self):
         self.status = 'confirmed'
 
@@ -46,3 +62,20 @@ class WorkspaceBooking(models.Model):
 
     def action_complete(self):
         self.status = 'completed'
+    @api.onchange('booking_type')
+
+    def _onchange_booking_type(self):
+        if self.booking_type:
+            if self.booking_type == 'hourly':
+                self.duration_value = 1.0
+            elif self.booking_type == 'daily':
+                self.duration_value = 1.0
+            elif self.booking_type == 'monthly':
+                self.duration_value = 1.0
+            # Ajuster le libellé dans l'interface
+            return {
+                'warning': {
+                    'title': 'Information',
+                    'message': f'Entrez le nombre de {self.booking_type} dans le champ "Duration"'
+                }
+            }

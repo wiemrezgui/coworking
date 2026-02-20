@@ -191,64 +191,69 @@
          - created_date: readonly (default=now)
     ====================================================== -->
 
-    <record id="view_workspace_booking_tree" model="ir.ui.view">
-        <field name="name">workspace.booking.tree</field>
-        <field name="model">workspace.booking</field>
-        <field name="arch" type="xml">
-            <!-- status is hidden but needed for decorations -->
-            <tree decoration-success="status == 'confirmed'"
-                  decoration-warning="status == 'pending'"
-                  decoration-muted="status == 'cancelled'"
-                  decoration-info="status == 'completed'">
-                <field name="space_id"/>
-                <field name="customer_id"/>
-                <field name="booking_type"/>
-                <field name="start_date"/>
-                <field name="end_date"/>
-                <field name="total_price"/>
-                <field name="status" />
-            </tree>
-        </field>
-    </record>
+   <record id="view_workspace_booking_tree" model="ir.ui.view">
+    <field name="name">workspace.booking.tree</field>
+    <field name="model">workspace.booking</field>
+    <field name="arch" type="xml">
+        <tree decoration-success="status == 'confirmed'"
+              decoration-warning="status == 'pending'"
+              decoration-muted="status == 'cancelled'"
+              decoration-info="status == 'completed'">
+            <field name="space_id"/>
+            <field name="customer_id"/>
+            <field name="booking_type"/>
+            <field name="duration_value" string="Duration"/>
+            <field name="start_date"/>
+            <field name="end_date"/>
+            <field name="total_price"/>
+            <field name="status" widget="badge"/>
+        </tree>
+    </field>
+</record>
 
-    <record id="view_workspace_booking_form" model="ir.ui.view">
-        <field name="name">workspace.booking.form</field>
-        <field name="model">workspace.booking</field>
-        <field name="arch" type="xml">
-            <form>
-                <header>
-                    <button name="action_confirm"  string="Confirm"            type="object"
-                            class="btn-primary"
-                            invisible="status != 'pending'"/>
-                    <button name="action_cancel"   string="Cancel"             type="object"
-                            invisible="status not in ('pending', 'confirmed')"/>
-                    <button name="action_complete" string="Mark as Completed"  type="object"
-                            invisible="status != 'confirmed'"/>
-                    <field name="status" widget="statusbar"
-                           statusbar_visible="pending,confirmed,completed"/>
-                </header>
-                <sheet>
-                    <group>
-                        <group string="Booking Info">
-                            <field name="space_id"/>
-                            <field name="customer_id"/>
-                            <field name="booking_type"/>
-                        </group>
-                        <group string="Schedule &amp; Price">
-                            <field name="start_date"/>
-                            <field name="end_date"/>
-                            <!-- computed+stored → always readonly -->
-                            <field name="total_price" readonly="1"/>
-                            <field name="created_date" readonly="1"/>
-                        </group>
+<record id="view_workspace_booking_form" model="ir.ui.view">
+    <field name="name">workspace.booking.form</field>
+    <field name="model">workspace.booking</field>
+    <field name="arch" type="xml">
+        <form>
+            <header>
+                <button name="action_confirm"  string="Confirm" type="object"
+                        class="btn-primary"
+                        invisible="status != 'pending'"/>
+                <button name="action_cancel"   string="Cancel" type="object"
+                        invisible="status not in ('pending', 'confirmed')"/>
+                <button name="action_complete" string="Mark as Completed" type="object"
+                        invisible="status != 'confirmed'"/>
+                <field name="status" widget="statusbar"
+                       statusbar_visible="pending,confirmed,completed"/>
+            </header>
+            <sheet>
+                <group>
+                    <group string="Booking Info">
+                        <field name="space_id"/>
+                        <field name="customer_id"/>
+                        <field name="booking_type"/>
                     </group>
-                    <group string="Notes">
-                        <field name="notes" nolabel="1"/>
+                    <group string="Schedule">
+                        <field name="start_date"/>
+                        <field name="duration_value" widget="float"/>
+                        <!-- Version corrigée pour Odoo 17 -->
+                        <field name="end_date" readonly="1"/>
                     </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
+                </group>
+                <group>
+                    <group string="Price">
+                        <field name="total_price" readonly="1"/>
+                        <field name="created_date" readonly="1"/>
+                    </group>
+                </group>
+                <group string="Notes">
+                    <field name="notes" nolabel="1"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
 
     <record id="view_workspace_booking_search" model="ir.ui.view">
         <field name="name">workspace.booking.search</field>
