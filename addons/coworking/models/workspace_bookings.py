@@ -109,8 +109,25 @@ class WorkspaceBooking(models.Model):
                     )
 
     def action_confirm(self):
-        """Confirme la réservation"""
+        """Confirme la réservation et ferme le formulaire"""
         self.status = 'confirmed'
+        
+        # Notification
+        notification = {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Booking Confirmed',
+                'message': f'Booking for {self.space_id.name} confirmed',
+                'sticky': False,
+                'type': 'success',
+                'next': {
+                    'type': 'ir.actions.act_window_close',  # Ferme le formulaire
+                }
+            }
+        }
+        
+        # Après la notification, on veut fermer le formulaire
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
