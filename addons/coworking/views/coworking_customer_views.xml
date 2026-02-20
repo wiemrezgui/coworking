@@ -83,9 +83,9 @@
 
     <!-- Action -->
     <record id="action_coworking_customer" model="ir.actions.act_window">
-        <field name="name">Customers</field>
-        <field name="res_model">coworking.customer</field>
-        <field name="view_mode">tree,form</field>
-        <field name="context">{}</field>
+    <field name="name">Customers</field>
+    <field name="res_model">coworking.customer</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{'active_test': False}</field>
     </record>
 </odoo>
