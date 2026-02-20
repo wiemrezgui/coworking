@@ -64,18 +64,59 @@ class WorkspaceBooking(models.Model):
         self.status = 'completed'
     @api.onchange('booking_type')
 
+    @api.onchange('booking_type')
     def _onchange_booking_type(self):
         if self.booking_type:
+            self.duration_value = 1.0
+            
             if self.booking_type == 'hourly':
-                self.duration_value = 1.0
-            elif self.booking_type == 'daily':
-                self.duration_value = 1.0
-            elif self.booking_type == 'monthly':
-                self.duration_value = 1.0
-            # Ajuster le libellé dans l'interface
-            return {
-                'warning': {
-                    'title': 'Information',
-                    'message': f'Entrez le nombre de {self.booking_type} dans le champ "Duration"'
+                message = " RÉSERVATION À L'HEURE:\n\n"
+                message += "• Entrez le nombre d'heures dans le champ 'Duration'\n"
+                message += "• Exemples:\n"
+                message += "  - 1 = 1 heure\n"
+                message += "  - 2 = 2 heures\n"
+                message += "  - 1.5 = 1 heure 30 minutes\n"
+                message += "  - 0.5 = 30 minutes\n\n"
+                message += " Le prix total sera calculé automatiquement"
+                
+                return {
+                    'warning': {
+                        'title': ' Réservation horaire',
+                        'message': message
+                    }
                 }
-            }
+                
+            elif self.booking_type == 'daily':
+                message = " RÉSERVATION À LA JOURNÉE:\n\n"
+                message += "• Entrez le nombre de jours dans le champ 'Duration'\n"
+                message += "• Exemples:\n"
+                message += "  - 1 = 1 jour\n"
+                message += "  - 3 = 3 jours\n"
+                message += "  - 0.5 = Demi-journée\n"
+                message += "  - 7 = 1 semaine\n\n"
+                message += " Le prix total sera calculé automatiquement"
+                
+                return {
+                    'warning': {
+                        'title': ' Réservation journalière',
+                        'message': message
+                    }
+                }
+                
+            elif self.booking_type == 'monthly':
+                message = " RÉSERVATION AU MOIS:\n\n"
+                message += "• Entrez le nombre de mois dans le champ 'Duration'\n"
+                message += "• Exemples:\n"
+                message += "  - 1 = 1 mois\n"
+                message += "  - 3 = 3 mois\n"
+                message += "  - 6 = 6 mois\n"
+                message += "  - 12 = 1 an\n"
+                message += "  - 1.5 = 1 mois et demi\n\n"
+                message += " Le prix total sera calculé automatiquement"
+                
+                return {
+                    'warning': {
+                        'title': ' Réservation mensuelle',
+                        'message': message
+                    }
+                }

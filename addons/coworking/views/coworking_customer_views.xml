@@ -95,6 +95,6 @@
         <field name="name">Customers</field>
         <field name="res_model">coworking.customer</field>
         <field name="view_mode">tree,form</field>
-        <field name="context">{'search_default_active': 1}</field>
+        <field name="context">{}</field>
     </record>
 </odoo>
