@@ -206,7 +206,7 @@
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="total_price"/>
-                <field name="status" invisible="1"/>
+                <field name="status" />
             </tree>
         </field>
     </record>

@@ -21,7 +21,7 @@
                 <field name="name"/>
                 <field name="category"/>
                 <field name="condition"/>
-                <field name="status" invisible="1"/>
+                <field name="status" />
                 <field name="borrower_id"/>
                 <field name="borrow_date"/>
             </tree>
