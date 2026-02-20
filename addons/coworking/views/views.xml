@@ -217,13 +217,21 @@
     <field name="arch" type="xml">
         <form>
             <header>
-                <button name="action_confirm"  string="Confirm" type="object"
+                <!-- Confirm button: visible only for existing records with pending status -->
+                <button name="action_confirm" string="Confirm" type="object"
                         class="btn-primary"
-                        invisible="status != 'pending'"/>
-                <button name="action_cancel"   string="Cancel" type="object"
-                        invisible="status not in ('pending', 'confirmed')"/>
+                        invisible="not id or status != 'pending'"/>
+                
+                <!-- Cancel button: visible only for existing records with pending or confirmed status -->
+                <button name="action_cancel" string="Cancel" type="object"
+                        class="btn-secondary"
+                        invisible="not id or status not in ('pending', 'confirmed')"/>
+                
+                <!-- Complete button: visible only for existing records with confirmed status -->
                 <button name="action_complete" string="Mark as Completed" type="object"
-                        invisible="status != 'confirmed'"/>
+                        class="btn-success"
+                        invisible="not id or status != 'confirmed'"/>
+                
                 <field name="status" widget="statusbar"
                        statusbar_visible="pending,confirmed,completed"/>
             </header>
@@ -237,7 +245,6 @@
                     <group string="Schedule">
                         <field name="start_date"/>
                         <field name="duration_value" widget="float"/>
-                        <!-- Version corrigée pour Odoo 17 -->
                         <field name="end_date" readonly="1"/>
                     </group>
                 </group>
@@ -254,7 +261,6 @@
         </form>
     </field>
 </record>
-
     <record id="view_workspace_booking_search" model="ir.ui.view">
         <field name="name">workspace.booking.search</field>
         <field name="model">workspace.booking</field>
