@@ -53,15 +53,6 @@
                                 </tree>
                             </field>
                         </page>
-                        <page string="Borrow History">
-                            <field name="borrow_ids" readonly="1">
-                                <tree>
-                                    <field name="item_id"/>
-                                    <field name="borrow_date"/>
-                                    <field name="return_date"/>
-                                </tree>
-                            </field>
-                        </page>
                         <page string="Notes">
                             <field name="notes" nolabel="1"/>
                         </page>

@@ -16,9 +16,6 @@ class CoworkingCustomer(models.Model):
     # Relation avec les réservations
     booking_ids = fields.One2many('workspace.booking', 'customer_id', string='Bookings')
     
-    # Relation avec les emprunts
-    borrow_ids = fields.One2many('library.borrow.history', 'borrower_id', string='Borrows')
-    
     # Pour compter les réservations
     booking_count = fields.Integer(string='Booking Count', compute='_compute_booking_count')
     

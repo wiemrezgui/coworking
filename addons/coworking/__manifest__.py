@@ -25,7 +25,7 @@ Long description of module's purpose
         'security/ir.model.access.csv',
         'views/coworking_customer_views.xml', # customer views
         'views/views.xml',           # types, amenities, spaces, bookings
-        'views/library_views.xml',   # library items + borrow history
+        'views/library_views.xml',   # library items
         'views/menus.xml',
         'views/templates.xml',
     ],
