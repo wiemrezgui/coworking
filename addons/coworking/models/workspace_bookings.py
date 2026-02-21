@@ -6,7 +6,7 @@ class WorkspaceBooking(models.Model):
     _name = 'workspace.booking'
     _description = 'Workspace Booking'
     _order = 'start_date desc'
-
+    name = fields.Char(string='Name', compute='_compute_name', store=True)
     space_id = fields.Many2one('workspace.space', string='Space', required=True)
     customer_id = fields.Many2one('coworking.customer', string='Customer', required=True)
     booking_type = fields.Selection([
@@ -108,6 +108,19 @@ class WorkspaceBooking(models.Model):
                         f" Space '{booking.space_id.name}' is already booked for this period."
                     )
 
+    @api.depends('space_id', 'customer_id')
+    def _compute_name(self):
+        """Calcule le nom à afficher pour la réservation"""
+        for booking in self:
+            if booking.space_id and booking.customer_id:
+                booking.name = f"{booking.space_id.name} - {booking.customer_id.name}"
+            elif booking.space_id:
+                booking.name = booking.space_id.name
+            else:
+                booking.name = f"Booking #{booking.id}"
+
+    display_name = fields.Char(string='Nom', compute='_compute_display_name', store=True)
+
     def action_confirm(self):
         """Confirme la réservation et ferme le formulaire"""
         self.status = 'confirmed'
@@ -126,7 +139,7 @@ class WorkspaceBooking(models.Model):
                 }
             }
         }
-        
+    
         # Après la notification, on veut fermer le formulaire
         return {
             'type': 'ir.actions.client',

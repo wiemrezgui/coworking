@@ -58,11 +58,11 @@
           name="Customers"
           parent="menu_coworking_main"
           action="action_coworking_customer"
-          sequence="5"/>          
-  <menuitem id="menu_coworking_planning"
+          sequence="5"/>  
+              <!-- Menu pour le calendrier -->
+    <menuitem id="menu_coworking_booking_calendar"
               name="Booking Calendar"
               parent="menu_coworking_main"
-              action="calendar.action_calendar_event"
-              sequence="4"
-              groups="base.group_user"/>
+              action="action_coworking_booking_calendar"
+              sequence="4"/>        
 </odoo>

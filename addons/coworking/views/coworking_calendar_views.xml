@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action pour le calendrier des réservations -->
+    <record id="action_coworking_booking_calendar" model="ir.actions.act_window">
+        <field name="name">Booking Calendar</field>
+        <field name="res_model">workspace.booking</field>
+        <field name="view_mode">calendar,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucune réservation à afficher
+            </p>
+        </field>
+    </record>
+
+    <!-- Vue calendrier pour les réservations -->
+    <record id="view_coworking_booking_calendar" model="ir.ui.view">
+        <field name="name">coworking.booking.calendar</field>
+        <field name="model">workspace.booking</field>
+        <field name="arch" type="xml">
+            <calendar string="Bookings" 
+                      date_start="start_date" 
+                      date_stop="end_date" 
+                      color="space_id">
+                <field name="name"/>
+                <field name="space_id"/>
+                <field name="customer_id"/>
+                <field name="status"/>
+            </calendar>
+        </field>
+    </record>
+</odoo>
