@@ -7,3 +7,4 @@ from . import workspace_spaces
 from . import workspace_space_amenities
 from . import workspace_bookings
 from . import library_items
+from . import calendar_integration

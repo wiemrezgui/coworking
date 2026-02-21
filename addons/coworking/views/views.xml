@@ -231,11 +231,14 @@
                 <button name="action_complete" string="Mark as Completed" type="object"
                         class="btn-success"
                         invisible="not id or status != 'confirmed'"/>
-                
+                        <button name="action_view_in_calendar" string="View in Calendar" type="object"
+                    class="btn-info"
+                    invisible="not calendar_event_id"/>
                 <field name="status" widget="statusbar"
                        statusbar_visible="pending,confirmed,completed"/>
             </header>
             <sheet>
+             <field name="calendar_event_id" invisible="1"/>
                 <group>
                     <group string="Booking Info">
                         <field name="space_id"/>
