@@ -41,7 +41,7 @@ class LibraryItem(models.Model):
                 item.status = 'maintenance'
             elif item.available_quantity <= 0:
                 item.status = 'unavailable'
-            elif item.available_quantity < item.total_quantity:
+            elif item.available_quantity <= item.total_quantity*0.5:
                 item.status = 'limited'
             else:
                 item.status = 'available'

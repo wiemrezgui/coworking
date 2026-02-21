@@ -59,7 +59,8 @@
           parent="menu_coworking_main"
           action="action_coworking_customer"
           sequence="5"/>  
-              <!-- Menu pour le calendrier -->
+          
+    <!-- Menu pour le calendrier -->
     <menuitem id="menu_coworking_booking_calendar"
               name="Booking Calendar"
               parent="menu_coworking_main"

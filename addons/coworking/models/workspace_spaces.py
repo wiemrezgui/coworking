@@ -60,12 +60,3 @@ class WorkspaceSpace(models.Model):
             if space.daily_rate > 0 and space.monthly_rate > 0:
                 if space.monthly_rate > space.daily_rate * 31:
                     raise ValidationError(" Monthly rate seems too high compared to daily rate.")
-
-    @api.onchange('hourly_rate')
-    def _onchange_hourly_rate(self):
-        """Suggère des tarifs journalier et mensuel basés sur le tarif horaire"""
-        if self.hourly_rate and self.hourly_rate > 0:
-            if not self.daily_rate:
-                self.daily_rate = self.hourly_rate * 8  # 8 heures = 1 jour
-            if not self.monthly_rate:
-                self.monthly_rate = self.hourly_rate * 8 * 22  # 22 jours ouvrés
