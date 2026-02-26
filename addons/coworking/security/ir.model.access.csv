@@ -1,8 +1,19 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_library_item,library.item,model_library_item,base.group_user,1,1,1,1
-access_workspace_amenity,workspace.amenity,model_workspace_amenity,base.group_user,1,1,1,1
-access_workspace_booking,workspace.booking,model_workspace_booking,base.group_user,1,1,1,1
-access_workspace_space_amenity,workspace.space.amenity,model_workspace_space_amenity,base.group_user,1,1,1,1
-access_workspace_space,workspace.space,model_workspace_space,base.group_user,1,1,1,1
-access_workspace_type,workspace.type,model_workspace_type,base.group_user,1,1,1,1
-access_coworking_customer,coworking.customer,model_coworking_customer,base.group_user,1,1,1,1
+
+# ADMIN - FULL ACCESS
+access_library_item_admin,library.item.admin,model_library_item,coworking_management.group_coworking_admin,1,1,1,1
+access_workspace_amenity_admin,workspace.amenity.admin,model_workspace_amenity,coworking_management.group_coworking_admin,1,1,1,1
+access_workspace_booking_admin,workspace.booking.admin,model_workspace_booking,coworking_management.group_coworking_admin,1,1,1,1
+access_workspace_space_amenity_admin,workspace.space.amenity.admin,model_workspace_space_amenity,coworking_management.group_coworking_admin,1,1,1,1
+access_workspace_space_admin,workspace.space.admin,model_workspace_space,coworking_management.group_coworking_admin,1,1,1,1
+access_workspace_type_admin,workspace.type.admin,model_workspace_type,coworking_management.group_coworking_admin,1,1,1,1
+access_coworking_customer_admin,coworking.customer.admin,model_coworking_customer,coworking_management.group_coworking_admin,1,1,1,1
+
+# MANAGER - READ ONLY
+access_library_item_manager,library.item.manager,model_library_item,coworking_management.group_coworking_manager,1,0,0,0
+access_workspace_amenity_manager,workspace.amenity.manager,model_workspace_amenity,coworking_management.group_coworking_manager,1,0,0,0
+access_workspace_booking_manager,workspace.booking.manager,model_workspace_booking,coworking_management.group_coworking_manager,1,0,0,0
+access_workspace_space_amenity_manager,workspace.space.amenity.manager,model_workspace_space_amenity,coworking_management.group_coworking_manager,1,0,0,0
+access_workspace_space_manager,workspace.space.manager,model_workspace_space,coworking_management.group_coworking_manager,1,0,0,0
+access_workspace_type_manager,workspace.type.manager,model_workspace_type,coworking_management.group_coworking_manager,1,0,0,0
+access_coworking_customer_manager,coworking.customer.manager,model_coworking_customer,coworking_management.group_coworking_manager,1,0,0,0
